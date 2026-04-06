@@ -4,6 +4,7 @@
 
 **Compose, transform, and send HTML emails that render perfectly everywhere.**  
 Paste your HTML → get email-client-safe output → send or copy to clipboard.
+<img width="1136" height="571" alt="image" src="https://github.com/user-attachments/assets/2c76bab3-ccce-45dc-a2e8-d4470a8b69bb" />
 
 ---
 
