@@ -1,4 +1,7 @@
 import nodemailer from 'nodemailer';
+import fs from 'fs';
+import path from 'path';
+import { decrypt } from './crypto';
 
 export interface SmtpConfig {
   host: string;
@@ -18,7 +21,29 @@ export interface EmailPayload {
   html: string;
 }
 
-function getSmtpConfig(): SmtpConfig {
+function readSavedConfig(): SmtpConfig | null {
+  try {
+    const configFile = path.join(process.cwd(), '.data', 'smtp-config.json');
+    if (fs.existsSync(configFile)) {
+      const data = fs.readFileSync(configFile, 'utf-8');
+      const stored = JSON.parse(data);
+      return {
+        ...stored,
+        password: stored.password ? decrypt(stored.password) : '',
+      };
+    }
+  } catch {
+    // fall through
+  }
+  return null;
+}
+
+export function getSmtpConfig(): SmtpConfig {
+  const saved = readSavedConfig();
+  if (saved && saved.host && saved.user && saved.password) {
+    return saved;
+  }
+
   return {
     host: process.env.SMTP_HOST || '',
     port: Number(process.env.SMTP_PORT) || 587,
@@ -39,7 +64,7 @@ export async function sendEmail(payload: EmailPayload): Promise<{ success: boole
   const config = getSmtpConfig();
 
   if (!config.host || !config.user || !config.password) {
-    return { success: false, error: 'SMTP is not configured. Set SMTP_HOST, SMTP_USER, SMTP_PASSWORD in your .env.local file.' };
+    return { success: false, error: 'SMTP is not configured. Go to Settings to add your SMTP server details.' };
   }
 
   const transport = nodemailer.createTransport({

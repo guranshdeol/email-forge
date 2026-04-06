@@ -2,13 +2,11 @@
 
 import { useState, useCallback, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
-import EditorTabs from '@/components/editor/EditorTabs';
 import EmailPreview from '@/components/preview/EmailPreview';
 import ComposeForm from '@/components/compose/ComposeForm';
 import TemplateGallery from '@/components/templates/TemplateGallery';
 
 const CodeEditor = dynamic(() => import('@/components/editor/CodeEditor'), { ssr: false });
-const VisualEditor = dynamic(() => import('@/components/editor/VisualEditor'), { ssr: false });
 
 const DEFAULT_HTML = `<table role="presentation" cellpadding="0" cellspacing="0" border="0" width="600" align="center" style="max-width: 600px; margin: 0 auto; font-family: Arial, Helvetica, sans-serif;">
   <tr>
@@ -23,7 +21,6 @@ const DEFAULT_HTML = `<table role="presentation" cellpadding="0" cellspacing="0"
 </table>`;
 
 export default function ComposePage() {
-  const [editorTab, setEditorTab] = useState<'code' | 'visual'>('code');
   const [html, setHtml] = useState(DEFAULT_HTML);
   const [transformedHtml, setTransformedHtml] = useState('');
   const [showTemplates, setShowTemplates] = useState(false);
@@ -85,19 +82,15 @@ export default function ComposePage() {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Editor Panel */}
         <div className="w-1/2 flex flex-col border-r border-surface-700 min-w-0">
-          <EditorTabs activeTab={editorTab} onTabChange={setEditorTab} />
+          <div className="flex items-center px-3 py-1.5 border-b border-surface-700 bg-surface-900">
+            <span className="text-xs text-surface-400 font-medium">HTML</span>
+          </div>
           <div className="flex-1 overflow-hidden">
-            {editorTab === 'code' ? (
-              <CodeEditor value={html} onChange={handleHtmlChange} />
-            ) : (
-              <VisualEditor value={html} onChange={handleHtmlChange} />
-            )}
+            <CodeEditor value={html} onChange={handleHtmlChange} />
           </div>
         </div>
 
-        {/* Preview Panel */}
         <div className="w-1/2 flex flex-col min-w-0">
           <EmailPreview html={transformedHtml} />
         </div>
