@@ -1,0 +1,46 @@
+{
+  "name": "email-forge",
+  "version": "1.0.0",
+  "description": "Compose, transform, and send email-safe HTML emails with live preview and dark mode support",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "^14.2.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "juice": "^11.0.0",
+    "nodemailer": "^6.9.0",
+    "cheerio": "^1.0.0",
+    "@monaco-editor/react": "^4.6.0",
+    "@tiptap/react": "^2.6.0",
+    "@tiptap/starter-kit": "^2.6.0",
+    "@tiptap/extension-color": "^2.6.0",
+    "@tiptap/extension-text-style": "^2.6.0",
+    "@tiptap/extension-text-align": "^2.6.0",
+    "@tiptap/extension-image": "^2.6.0",
+    "@tiptap/extension-link": "^2.6.0",
+    "@tiptap/extension-table": "^2.6.0",
+    "@tiptap/extension-table-row": "^2.6.0",
+    "@tiptap/extension-table-cell": "^2.6.0",
+    "@tiptap/extension-table-header": "^2.6.0",
+    "lucide-react": "^0.400.0",
+    "sonner": "^1.5.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "@types/nodemailer": "^6.4.0",
+    "typescript": "^5.5.0",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8.4.0",
+    "autoprefixer": "^10.4.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "^14.2.0"
+  }
+}
