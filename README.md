@@ -49,7 +49,7 @@ Paste raw HTML in the editor, see the transformed result in real-time, and eithe
 ### Docker (recommended)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/email-forge.git
+git clone https://github.com/guranshdeol/email-forge.git
 cd email-forge
 cp .env.example .env.local
 docker compose --profile dev up
@@ -60,7 +60,7 @@ Open **[http://localhost:3000](http://localhost:3000)**
 ### Native (Node.js 20+)
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/email-forge.git
+git clone https://github.com/guranshdeol/email-forge.git
 cd email-forge
 npm install
 cp .env.example .env.local
