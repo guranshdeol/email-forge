@@ -28,7 +28,7 @@ export default function EmailPreview({ html }: EmailPreviewProps) {
       <meta charset="utf-8">
       <style>
         body { margin: 0; padding: 16px; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
-        ${mode === 'dark' ? 'body { background-color: #1a1a2e; color: #e0e0e0; }' : 'body { background-color: #ffffff; }'}
+        ${mode === 'dark' ? 'body { background-color: #1a1a2e; color: #e0e0e0; }' : 'body { background-color: #f5f5f5; }'}
       </style>
     </head>
     <body>${previewHtml}</body>
@@ -37,20 +37,20 @@ export default function EmailPreview({ html }: EmailPreviewProps) {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex items-center justify-between border-b border-surface-700 bg-surface-900 px-3">
+      <div className="flex items-center justify-between border-b border-white/[0.06] glass-panel px-3">
         <div className="flex items-center">
           <TabBtn active={view === 'preview'} onClick={() => setView('preview')} label="Preview" />
           <TabBtn active={view === 'source'} onClick={() => setView('source')} label="Source" />
         </div>
         {view === 'preview' && (
-          <div className="flex items-center gap-1 py-1">
+          <div className="flex items-center gap-0.5 py-1 bg-white/[0.04] rounded-lg px-1">
             <ModeBtn active={mode === 'light'} onClick={() => setMode('light')} label="Light" />
             <ModeBtn active={mode === 'dark'} onClick={() => setMode('dark')} label="Dark" />
           </div>
         )}
       </div>
 
-      <div className="flex-1 overflow-auto bg-surface-800">
+      <div className="flex-1 overflow-auto bg-surface-950/50">
         {view === 'preview' ? (
           <iframe
             srcDoc={iframeSrcDoc}
@@ -88,8 +88,8 @@ function ModeBtn({ active, onClick, label }: { active: boolean; onClick: () => v
     <button
       type="button"
       onClick={onClick}
-      className={`px-2.5 py-1 text-xs rounded transition-colors ${
-        active ? 'bg-surface-700 text-white' : 'text-surface-400 hover:text-white'
+      className={`px-2.5 py-1 text-xs rounded-md transition-all ${
+        active ? 'bg-white/[0.1] text-white shadow-sm' : 'text-surface-400 hover:text-white'
       }`}
     >
       {label}

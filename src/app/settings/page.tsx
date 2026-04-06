@@ -87,7 +87,7 @@ export default function SettingsPage() {
 
         <SmtpStatus configured={configured} loading={loading} />
 
-        <div className="bg-surface-900 border border-surface-700 rounded-xl p-6 mt-6">
+        <div className="glass-surface rounded-2xl p-6 mt-6">
           <h2 className="text-lg font-semibold text-white mb-6">SMTP Configuration</h2>
 
           {loading ? (
@@ -111,22 +111,22 @@ export default function SettingsPage() {
                 <Toggle label="Require STARTTLS" checked={form.requireTLS} onChange={(v) => setForm({ ...form, requireTLS: v })} />
               </div>
 
-              <div className="flex items-center gap-3 pt-4 border-t border-surface-700">
+              <div className="flex items-center gap-3 pt-4 border-t border-white/[0.06]">
                 <button
                   type="button"
                   onClick={handleSave}
                   disabled={saving}
-                  className="px-5 py-2 text-sm bg-accent hover:bg-accent-hover text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+                  className="px-5 py-2 text-sm bg-accent/90 hover:bg-accent text-white rounded-lg font-medium transition-all disabled:opacity-50 backdrop-blur-sm"
                 >
                   {saving ? 'Saving...' : 'Save Settings'}
                 </button>
-                <span className="text-xs text-surface-500">Saved locally in .data/smtp-config.json (never committed to git)</span>
+                <span className="text-xs text-surface-500">Encrypted and stored locally (never committed to git)</span>
               </div>
             </div>
           )}
         </div>
 
-        <div className="bg-surface-900 border border-surface-700 rounded-xl p-6 mt-6">
+        <div className="glass-surface rounded-2xl p-6 mt-6">
           <h2 className="text-lg font-semibold text-white mb-4">Quick Presets</h2>
           <p className="text-sm text-surface-400 mb-4">Click a preset to auto-fill server settings, then add your credentials.</p>
           <div className="grid grid-cols-3 gap-3">
@@ -148,7 +148,7 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        <div className="bg-surface-900 border border-surface-700 rounded-xl p-6 mt-6">
+        <div className="glass-surface rounded-2xl p-6 mt-6">
           <h2 className="text-lg font-semibold text-white mb-4">Test Connection</h2>
           <p className="text-sm text-surface-400 mb-4">Send a test email to verify your configuration works.</p>
           <TestEmailForm />
@@ -161,7 +161,7 @@ export default function SettingsPage() {
 function SmtpStatus({ configured, loading }: { configured: boolean; loading: boolean }) {
   if (loading) {
     return (
-      <div className="bg-surface-800 border border-surface-700 rounded-lg p-4 flex items-center gap-3">
+      <div className="glass-surface rounded-xl p-4 flex items-center gap-3">
         <div className="w-3 h-3 bg-surface-500 rounded-full animate-pulse" />
         <span className="text-sm text-surface-400">Checking SMTP configuration...</span>
       </div>
@@ -169,8 +169,10 @@ function SmtpStatus({ configured, loading }: { configured: boolean; loading: boo
   }
 
   return (
-    <div className={`border rounded-lg p-4 flex items-center gap-3 ${
-      configured ? 'bg-emerald-950/30 border-emerald-800' : 'bg-amber-950/30 border-amber-800'
+    <div className={`rounded-xl p-4 flex items-center gap-3 backdrop-blur-md ${
+      configured
+        ? 'bg-emerald-500/10 border border-emerald-500/20'
+        : 'bg-amber-500/10 border border-amber-500/20'
     }`}>
       <div className={`w-3 h-3 rounded-full ${configured ? 'bg-emerald-400' : 'bg-amber-400'}`} />
       <span className={`text-sm ${configured ? 'text-emerald-300' : 'text-amber-300'}`}>
@@ -203,7 +205,7 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full bg-surface-800 border border-surface-600 rounded-lg px-3 py-2 text-sm text-white placeholder-surface-500 focus:outline-none focus:border-accent transition-colors"
+        className="w-full glass-input rounded-lg px-3 py-2 text-sm text-white placeholder-surface-500 focus:outline-none transition-all"
       />
     </div>
   );
@@ -217,9 +219,9 @@ function Toggle({ label, checked, onChange }: { label: string; checked: boolean;
         role="switch"
         aria-checked={checked}
         onClick={() => onChange(!checked)}
-        className={`relative w-9 h-5 rounded-full transition-colors ${checked ? 'bg-accent' : 'bg-surface-600'}`}
+        className={`relative w-9 h-5 rounded-full transition-colors ${checked ? 'bg-accent' : 'bg-white/10'}`}
       >
-        <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform ${checked ? 'translate-x-4' : ''}`} />
+        <span className={`absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform shadow-sm ${checked ? 'translate-x-4' : ''}`} />
       </button>
       <span className="text-xs text-surface-400">{label}</span>
     </label>
@@ -231,7 +233,7 @@ function PresetBtn({ name, sub, onClick }: { name: string; sub: string; onClick:
     <button
       type="button"
       onClick={onClick}
-      className="bg-surface-800 border border-surface-700 rounded-lg p-3 text-left hover:border-accent transition-colors"
+      className="glass-btn rounded-xl p-3 text-left hover:border-accent/30 transition-all"
     >
       <div className="text-sm font-medium text-white">{name}</div>
       <div className="text-xs text-surface-500 mt-0.5">{sub}</div>
@@ -279,13 +281,13 @@ function TestEmailForm() {
         value={testTo}
         onChange={(e) => setTestTo(e.target.value)}
         placeholder="your-email@example.com"
-        className="flex-1 bg-surface-800 border border-surface-600 rounded-lg px-3 py-2 text-sm text-white placeholder-surface-500 focus:outline-none focus:border-accent"
+        className="flex-1 glass-input rounded-lg px-3 py-2 text-sm text-white placeholder-surface-500 focus:outline-none"
       />
       <button
         type="button"
         onClick={handleTest}
         disabled={testing}
-        className="px-4 py-2 text-sm bg-accent hover:bg-accent-hover text-white rounded-lg font-medium transition-colors disabled:opacity-50"
+        className="px-4 py-2 text-sm bg-accent/90 hover:bg-accent text-white rounded-lg font-medium transition-all disabled:opacity-50 backdrop-blur-sm"
       >
         {testing ? 'Sending...' : 'Send Test'}
       </button>

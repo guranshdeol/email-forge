@@ -65,13 +65,13 @@ export default function ComposePage() {
 
   return (
     <>
-      <div className="flex items-center justify-between px-4 py-2 border-b border-surface-700 bg-surface-900 shrink-0">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-white/[0.06] glass-panel shrink-0">
         <div className="flex items-center gap-4">
           <h1 className="text-sm font-semibold text-white">Compose</h1>
           <button
             type="button"
             onClick={() => setShowTemplates(true)}
-            className="px-3 py-1 text-xs bg-surface-800 border border-surface-600 text-surface-300 hover:text-white hover:border-surface-500 rounded transition-colors"
+            className="px-3 py-1 text-xs glass-btn rounded-lg text-surface-300 hover:text-white"
           >
             Templates
           </button>
@@ -82,8 +82,8 @@ export default function ComposePage() {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        <div className="w-1/2 flex flex-col border-r border-surface-700 min-w-0">
-          <div className="flex items-center px-3 py-1.5 border-b border-surface-700 bg-surface-900">
+        <div className="w-1/2 flex flex-col border-r border-white/[0.06] min-w-0">
+          <div className="flex items-center px-3 py-1.5 border-b border-white/[0.06] glass-panel">
             <span className="text-xs text-surface-400 font-medium">HTML</span>
           </div>
           <div className="flex-1 overflow-hidden">

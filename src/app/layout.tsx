@@ -10,14 +10,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-surface-950 text-surface-200 h-screen flex overflow-hidden">
+      <body className="bg-[#080c14] text-surface-200 h-screen flex overflow-hidden">
         <Toaster
           position="top-right"
           toastOptions={{
             style: {
-              background: '#1e293b',
-              border: '1px solid #334155',
+              background: 'rgba(15, 23, 42, 0.85)',
+              backdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255,255,255,0.08)',
               color: '#e2e8f0',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
             },
           }}
         />
@@ -30,10 +32,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
 function Sidebar() {
   return (
-    <nav className="w-16 bg-surface-900 border-r border-surface-700 flex flex-col items-center py-4 gap-2 shrink-0">
+    <nav className="w-16 glass-sidebar flex flex-col items-center py-4 gap-2 shrink-0">
       <a
         href="/"
-        className="w-10 h-10 rounded-lg bg-accent flex items-center justify-center text-white font-bold text-sm mb-4"
+        className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent to-purple-500 flex items-center justify-center text-white font-bold text-sm mb-4 shadow-lg shadow-accent/20"
         title="Email Forge"
       >
         EF
@@ -48,7 +50,7 @@ function NavLink({ href, label, icon }: { href: string; label: string; icon: Rea
   return (
     <a
       href={href}
-      className="w-10 h-10 rounded-lg flex items-center justify-center text-surface-400 hover:text-white hover:bg-surface-800 transition-colors"
+      className="w-10 h-10 rounded-xl flex items-center justify-center text-surface-400 hover:text-white hover:bg-white/[0.08] transition-all"
       title={label}
     >
       {icon}

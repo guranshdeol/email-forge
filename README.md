@@ -1,55 +1,98 @@
+
+
 # Email Forge
 
-Compose, transform, and send email-safe HTML emails with live preview and dark mode support.
+**Compose, transform, and send HTML emails that render perfectly everywhere.**  
+Paste your HTML → get email-client-safe output → send or copy to clipboard.
 
-Email Forge solves the problem of HTML emails rendering differently across email clients. It takes your HTML, inlines CSS, applies Outlook-specific fixes, adds dark mode support, and lets you either send via SMTP or copy the transformed HTML to your clipboard.
+---
+
+## The Problem
+
+HTML emails are broken by design. Every email client renders them differently:
+
+- **Outlook** uses Word's HTML engine and ignores `max-width`, `flexbox`, `grid`, and `margin: auto`
+- **Gmail** strips `<style>` blocks entirely
+- **Apple Mail** auto-inverts colors in dark mode
+- **Yahoo** rewrites your class names
+
+You write a beautiful email, hit send, and it looks like garbage in half your recipients' inboxes.
+
+## The Solution
+
+Email Forge takes your HTML and runs it through a transformation pipeline that fixes all of this **before** you send:
+
+```
+Your HTML  →  CSS Inlining  →  Outlook Fixes  →  Dark Mode Support  →  Sanitization  →  Ready to Send
+```
+
+Paste raw HTML in the editor, see the transformed result in real-time, and either send via SMTP or copy to clipboard.
 
 ## Features
 
-- **Dual Editor**: Monaco code editor (paste raw HTML) and TipTap WYSIWYG visual editor
-- **Email-Safe Transformation Pipeline**: CSS inlining, Outlook conditional comments, MSO fixes, image fixes
-- **Dark Mode Support**: Injects `color-scheme` meta tags, explicit background/text colors, `data-ogsb`/`data-ogsc` attributes
-- **Live Preview**: Side-by-side preview with light/dark mode toggle and source view
-- **SMTP Sending**: Configure any SMTP server to send emails directly
-- **Copy to Clipboard**: Copy transformed HTML or rich text for pasting into any email client
-- **Template Library**: Pre-built email-safe templates (weekly update, announcement, newsletter, status report, etc.)
-- **Containerized**: Docker and Dev Container support for easy setup
+
+| Feature                     | Description                                                                              |
+| --------------------------- | ---------------------------------------------------------------------------------------- |
+| **Monaco Code Editor**      | Full-featured HTML editor with syntax highlighting and autocomplete                      |
+| **Live Preview**            | Side-by-side preview with light/dark mode toggle                                         |
+| **Transformation Pipeline** | CSS inlining, Outlook fixes, dark mode support, sanitization                             |
+| **SMTP Sending**            | Configure any SMTP server from the UI — credentials encrypted locally                    |
+| **Clipboard Export**        | Copy as raw HTML or rich text for pasting into any email client                          |
+| **Email Chip Input**        | Add/remove multiple recipients with tag-style chips (To, CC, BCC)                        |
+| **Template Library**        | 8 pre-built templates: weekly update, status report, newsletter, meeting recap, and more |
+| **Glassmorphism UI**        | Modern frosted glass interface with ambient lighting effects                             |
+| **Docker Ready**            | One command to run — no local Node.js required                                           |
+
 
 ## Quick Start
 
-### Option 1: Docker Compose (recommended)
+### Docker (recommended)
 
 ```bash
+git clone https://github.com/YOUR_USERNAME/email-forge.git
+cd email-forge
 cp .env.example .env.local
-# Edit .env.local with your SMTP settings (optional - clipboard always works)
 docker compose --profile dev up
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+Open **[http://localhost:3000](http://localhost:3000)**
 
-### Option 2: Dev Container (for development)
-
-1. Open this folder in VS Code or Cursor
-2. When prompted, click "Reopen in Container"
-3. Run `npm run dev` in the terminal
-4. Open [http://localhost:3000](http://localhost:3000)
-
-### Option 3: Native (requires Node.js 20+)
+### Native (Node.js 20+)
 
 ```bash
+git clone https://github.com/YOUR_USERNAME/email-forge.git
+cd email-forge
 npm install
 cp .env.example .env.local
-# Edit .env.local with your SMTP settings (optional)
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000).
+### Dev Container
+
+1. Open the folder in VS Code / Cursor
+2. Click **"Reopen in Container"** when prompted
+3. Run `npm run dev`
+
+> **SMTP is optional.** Without it, the editor, preview, transformation pipeline, and clipboard copy all work perfectly. Configure SMTP only when you want to send directly.
+
+## What the Pipeline Fixes
+
+
+| Email Client Problem                        | What Email Forge Does                                                                    |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------- |
+| `<style>` blocks stripped (Gmail, Outlook)  | Inlines all CSS into `style` attributes via [juice](https://github.com/Automattic/juice) |
+| `margin: 0 auto` centering broken (Outlook) | Wraps tables with `align="center"` and MSO conditionals                                  |
+| `max-width` ignored (Outlook)               | Sets explicit `width` attributes on tables                                               |
+| `flexbox` / `grid` not supported (Outlook)  | Strips unsupported CSS properties to prevent layout breaks                               |
+| Dark mode inverts colors unpredictably      | Adds explicit `background-color`, `color`, `data-ogsb`/`data-ogsc` attributes            |
+| Line-height inconsistent (Outlook)          | Injects `mso-line-height-rule: exactly`                                                  |
+| Image spacing gaps                          | Adds `display: block` and `border="0"` to `<img>` tags                                   |
+| Scripts, forms, event handlers              | Strips all dangerous content for email safety                                            |
+
 
 ## SMTP Configuration
 
-SMTP is optional. Without it, you can still use the transformation pipeline and copy emails to clipboard.
-
-Create a `.env.local` file in the project root:
+Configure SMTP from the **Settings** page in the app, or create `.env.local`:
 
 ```env
 SMTP_HOST=smtp.example.com
@@ -61,34 +104,69 @@ SMTP_PASSWORD=your-password
 SMTP_FROM=Your Name <your-username@example.com>
 ```
 
-See the Settings page in the app for common SMTP configurations (Gmail, Outlook, corporate relays).
+The Settings page includes quick presets for **Gmail**, **Outlook 365**, and **Yahoo**. Passwords saved through the UI are encrypted with AES-256-GCM and stored in `.data/smtp-config.json` (git-ignored).
 
-## What the Transformation Pipeline Does
+## Project Structure
 
-| Problem | Fix |
-|---------|-----|
-| `<style>` blocks stripped by email clients | Inlines all CSS into `style` attributes |
-| `margin: 0 auto` centering broken in Outlook | Wraps in `<table align="center">` |
-| `max-width` ignored in Outlook | Uses `width` attribute on tables |
-| `padding` on `<div>` ignored | Uses `<td>` padding instead |
-| Dark mode inverts colors unpredictably | Adds explicit colors, `data-ogsb`/`data-ogsc` attributes, `color-scheme` meta |
-| Line-height inconsistent in Outlook | Adds `mso-line-height-rule: exactly` |
-| Image spacing gaps | Adds `display: block` and `border="0"` to images |
-| Dangerous content (scripts, forms) | Strips scripts, forms, event handlers |
+```
+email-forge/
+├── src/
+│   ├── app/                    # Next.js App Router pages & API routes
+│   │   ├── page.tsx            # Main compose page
+│   │   ├── settings/           # SMTP settings page
+│   │   ├── api/
+│   │   │   ├── transform/      # HTML transformation endpoint
+│   │   │   ├── send/           # SMTP send endpoint
+│   │   │   └── settings/       # Settings CRUD endpoint
+│   │   ├── layout.tsx          # Root layout with glass sidebar
+│   │   └── globals.css         # Glass effect styles
+│   ├── components/
+│   │   ├── editor/             # Monaco code editor
+│   │   ├── preview/            # iframe-based email preview
+│   │   ├── compose/            # Compose form + email chip input
+│   │   └── templates/          # Template gallery + template data
+│   └── lib/
+│       ├── transform.ts        # Pipeline orchestrator
+│       ├── outlook-fixes.ts    # MSO conditionals, table fixes
+│       ├── dark-mode.ts        # Color-scheme meta, data-ogs* attrs
+│       ├── email-sanitize.ts   # Strip scripts, forms, handlers
+│       ├── smtp.ts             # Nodemailer transport config
+│       └── crypto.ts           # AES-256-GCM password encryption
+├── Dockerfile                  # Multi-stage production build
+├── docker-compose.yml          # Dev + prod profiles
+└── .devcontainer/              # VS Code Dev Container config
+```
 
 ## Tech Stack
 
-All open source, no paid services:
+All open source. No paid services. No API keys needed.
 
-- [Next.js](https://nextjs.org/) - React framework
-- [Monaco Editor](https://microsoft.github.io/monaco-editor/) - Code editor
-- [TipTap](https://tiptap.dev/) - WYSIWYG editor
-- [juice](https://github.com/Automattic/juice) - CSS inlining
-- [cheerio](https://cheerio.js.org/) - HTML manipulation
-- [Nodemailer](https://nodemailer.com/) - SMTP sending
-- [Tailwind CSS](https://tailwindcss.com/) - UI styling
-- [sonner](https://sonner.emilkowal.dev/) - Toast notifications
+- **[Next.js 14](https://nextjs.org/)** — React framework with App Router
+- **[Monaco Editor](https://microsoft.github.io/monaco-editor/)** — VS Code's editor in the browser
+- **[juice](https://github.com/Automattic/juice)** — CSS inlining engine
+- **[cheerio](https://cheerio.js.org/)** — Server-side HTML manipulation
+- **[Nodemailer](https://nodemailer.com/)** — SMTP email sending
+- **[Tailwind CSS](https://tailwindcss.com/)** — Utility-first styling
+- **[sonner](https://sonner.emilkowal.dev/)** — Toast notifications
+
+## Docker
+
+```bash
+# Development (hot reload, volume-mounted source)
+docker compose --profile dev up
+
+# Production (standalone build)
+docker compose --profile prod up --build
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
 ## License
 
-MIT
+[MIT](LICENSE) — use it however you want.
